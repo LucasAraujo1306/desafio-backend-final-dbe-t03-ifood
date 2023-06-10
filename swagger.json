@@ -1,0 +1,336 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "API para um PDV (Frente de Caixa)",
+		"description": "API do desafio final do curso da Cubos Academy com foco em back-end em parceira com o Ifood",
+		"contact": {
+			"name": "Support",
+			"email": [
+				"gilsonalvesdesouza@hotmail.com",
+				"lucas1306@hotmail.com.br",
+				"rafaelfirmino@msn.com"
+			]
+		},
+		"version": "1.0.0"
+	},
+	"paths": {
+		"/usuario": {
+			"post": {
+				"summary": "Cria um novo usuário",
+				"tags": [
+					"Usuário"
+				],
+				"requestBody": {
+					"description": "Dados do usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestUsuario"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseUsuario"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "O email informado já está em uso"
+					},
+					"422": {
+						"description": "Dados inválidos/incompletos"
+					},
+					"500": {
+						"description": "Erro interno do servidor"
+					}
+				}
+			},
+			"put": {
+				"summary": "Atualiza um usuário",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": [
+					"Usuário"
+				],
+				"requestBody": {
+					"description": "Dados do usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestUsuario"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseUsuario"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Acesso não autorizado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse401"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "O email informado já está em uso"
+					},
+					"422": {
+						"description": "Dados inválidos/incompletos"
+					},
+					"500": {
+						"description": "Erro interno do servidor"
+					}
+				}
+			},
+			"get": {
+				"summary": "Detalha o usuário logado",
+				"security": [
+					{
+						"bearerAuth": []
+					}
+				],
+				"tags": [
+					"Usuário"
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseUsuario"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Acesso não autorizado",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ErrorResponse401"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor"
+					}
+				}
+			}
+		},
+		"/login": {
+			"post": {
+				"summary": "Realiza o login de um usuário",
+				"tags": [
+					"Login"
+				],
+				"requestBody": {
+					"description": "Dados do usuário",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestLogin"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ResponseLogin"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Email e senha não conferem."
+					},
+					"500": {
+						"description": "Erro interno do servidor"
+					}
+				}
+			}
+		},
+		"/categoria": {
+			"get": {
+				"summary": "Lista todas as categorias",
+				"tags": [
+					"Categoria"
+				],
+				"responses": {
+					"200": {
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/ResponseCategoria"
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Erro interno do servidor"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"RequestUsuario": {
+				"type": "object",
+				"properties": {
+					"nome": {
+						"type": "string",
+						"description": "Nome do usuário",
+						"example": "Guido Cerqueira"
+					},
+					"email": {
+						"type": "string",
+						"description": "Email do usuário",
+						"example": "guido@gmail.com"
+					},
+					"senha": {
+						"type": "string",
+						"description": "Senha do usuário",
+						"example": "123456"
+					}
+				}
+			},
+			"ResponseUsuario": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number",
+						"description": "Id do usuário",
+						"example": 1,
+						"format": "int64"
+					},
+					"nome": {
+						"type": "string",
+						"description": "Nome do usuário",
+						"example": "Guido Cerqueira"
+					},
+					"email": {
+						"type": "string",
+						"description": "Email do usuário",
+						"example": "guido@gmail.com"
+					}
+				}
+			},
+			"RequestLogin": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Email do usuário",
+						"example": "example@gmail.com"
+					},
+					"senha": {
+						"type": "string",
+						"description": "senha do usuário",
+						"example": "123456"
+					}
+				}
+			},
+			"ResponseLogin": {
+				"type": "object",
+				"properties": {
+					"user": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "number",
+								"description": "Id do usuário",
+								"example": 1,
+								"format": "int64"
+							},
+							"email": {
+								"type": "string",
+								"description": "Email do usuário",
+								"example": "example@gmail.com"
+							}
+						}
+					},
+					"token": {
+						"type": "string",
+						"description": "Token de autenticação",
+						"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+					}
+				}
+			},
+			"ResponseCategoria": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "number",
+						"description": "Id da categoria",
+						"example": 1,
+						"format": "int64"
+					},
+					"nome": {
+						"type": "string",
+						"description": "Nome da categoria",
+						"example": "Informática"
+					}
+				}
+			},
+			"ErrorResponse401": {
+				"type": "object",
+				"properties": {
+					"mensagem": {
+						"type": "string",
+						"description": "Mensagem de erro"
+					},
+					"detalhes": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						},
+						"description": "Detalhes adicionais do erro"
+					}
+				},
+				"example": {
+					"mensagem": "Acesso não autorizado",
+					"detalhes": [
+						"Email e senha não conferem",
+						"Token não informado",
+						"Token inválido"
+					]
+				}
+			}
+		},
+		"securitySchemes": {
+			"bearerAuth": {
+				"description": "Autenticação via JWT",
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	}
+}
